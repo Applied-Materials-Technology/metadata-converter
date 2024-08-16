@@ -1,13 +1,7 @@
 import re
-from enum import Enum
+from distutils.util import strtobool
 
-class DataType(Enum):
-    SPRING = 1
-    SUMMER = 2
-    AUTUMN = 3
-    WINTER = 4
-
-bad_chars2 = "_."
+bad_chars2 = "_.;"
 
 def make_int(val):
     stripped_val = re.sub("[" + bad_chars2 + "]", "", val)
@@ -19,11 +13,17 @@ def make_str(val):
     return val
 
 def make_bool(val):
-    val = val
+    boolval = strtobool(val)
+    if boolval == 1:
+        val = True
+    else:
+        val = False
     return val
 
 def make_double(val):
-    val = val
+    val = val.split(";")
+    fake = "fake string!!"
+    #stripped_val = re.sub("[" + bad_chars2 + "]", "", val)
     return val
 
 
@@ -35,28 +35,6 @@ bad_chars = "$<>"
 
 search_type = "data_type"
 
-"""
-with open("example_metadata/Test001_19-0kW.m3inp","r") as fi:
-    id = []
-    for ln in fi:
-        if ln.startswith("<"):
-            if ln.startswith("<Deformed$image"):
-                pass
-            else:
-                stripped = re.sub("[" + bad_chars + "]", "", ln)
-                id.append(stripped[:-1])"""
-
-"""
-with open("example_metadata/Test001_19-0kW.m3inp","r") as fi:
-    id = []
-    for ln in fi:
-       print(ln)
-       for i in data_types:
-        type_found = str(i) in ln
-        if type_found == True:
-           print("True")
-        else:
-           print("False")"""
 
 def data_type_mark_search(line):
     #print("hi")
@@ -75,7 +53,8 @@ def key_val_pair_search(line, d_type):
         if line.startswith("<Deformed$image"):
             pass
         elif line.startswith("<Shape>"):
-            pass
+            stripped = re.sub("[" + bad_chars + "]", "", line)
+            id.append([stripped[:-1],"d_"])
         else:
             stripped = re.sub("[" + bad_chars + "]", "", line)
             id.append([stripped[:-1],d_type])
@@ -91,8 +70,8 @@ with open("example_metadata/Test001_19-0kW.m3inp","r") as fi:
         elif search_type == "key_vals":
             results = key_val_pair_search(ln, dat_type)
 
-mydict = {"one":1, "two":2,"three":3}
 
+mydict = {}
 
 for i in id:
     print(i)
@@ -100,12 +79,15 @@ for i in id:
     if i[1] == "i_":
         val = make_int(pair[1])
         mydict[pair[0]] = val
+    elif i[1] == "d_":
+        val = make_double(pair[1])
+        mydict[pair[0]] = val
+    elif i[1] == "b_":
+        val = make_bool(pair[1])
+        mydict[pair[0]] = val
     else:
         val = pair[1]
         mydict[pair[0]] = val
-    #print(type(val))
-    #print(pair[0])
-
 
 
 
@@ -119,3 +101,5 @@ filleddb.__dict__ = mydict
 
 print(type(filleddb.Strainwindow))
 print(type(filleddb.Delimiter))
+print(filleddb.Shape)
+print(type(filleddb.Automaticexport))

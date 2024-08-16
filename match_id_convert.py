@@ -7,11 +7,12 @@ class DataType(Enum):
     AUTUMN = 3
     WINTER = 4
 
-
+bad_chars2 = "_."
 
 def make_int(val):
-    val = int(val)
-    return val
+    stripped_val = re.sub("[" + bad_chars2 + "]", "", val)
+    val2 = int(stripped_val)
+    return val2
 
 def make_str(val):
     val = str(val)
@@ -66,12 +67,14 @@ def data_type_mark_search(line):
         if type_found == True:
             search_type = "key_vals"
             print(search_type)
-            return type_found
+            return str(i)
         
 def key_val_pair_search(line, d_type):
     global search_type
     if line.startswith("<"):
         if line.startswith("<Deformed$image"):
+            pass
+        elif line.startswith("<Shape>"):
             pass
         else:
             stripped = re.sub("[" + bad_chars + "]", "", line)
@@ -114,4 +117,5 @@ class ExampleDB:
 filleddb = object.__new__(ExampleDB)
 filleddb.__dict__ = mydict
 
-print(filleddb.Strainwindow)
+print(type(filleddb.Strainwindow))
+print(type(filleddb.Delimiter))

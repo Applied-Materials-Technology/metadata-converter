@@ -1,32 +1,4 @@
 import re
-from distutils.util import strtobool
-
-bad_chars2 = "_.;"
-
-def make_int(val):
-    stripped_val = re.sub("[" + bad_chars2 + "]", "", val)
-    val2 = int(stripped_val)
-    return val2
-
-def make_str(val):
-    val = str(val)
-    return val
-
-def make_bool(val):
-    boolval = strtobool(val)
-    if boolval == 1:
-        val = True
-    else:
-        val = False
-    return val
-
-def make_double(val):
-    val = val.split(";")
-    fake = "fake string!!"
-    #stripped_val = re.sub("[" + bad_chars2 + "]", "", val)
-    return val
-
-
 
 
 data_types = ["i_", "b_", "d_", "s_"]
@@ -35,19 +7,46 @@ bad_chars = "$<>"
 
 search_type = "data_type"
 
+bad_chars2 = "_.;"
+
+def make_int(val):
+    """makes metadata value integer when specified"""
+    stripped_val = re.sub("[" + bad_chars2 + "]", "", val)
+    val2 = int(stripped_val)
+    return val2
+
+def make_str(val):
+    """makes metadata value string when specified"""
+    val = str(val)
+    return val
+
+def make_bool(val):
+    """makes metadata value boolean when specified"""
+    if val == "True":
+        boolval = True
+    elif val == "False":
+        boolval = False
+    return boolval
+
+def make_double(val):
+    """splits metadata value into list of individual values when specified"""
+    val = val.split(";")
+    return val
+
 
 def data_type_mark_search(line):
-    #print("hi")
+    """search for data type labels when search_type is set to key_vals,
+    switch search type to key_vals once label has been found to find paired metadata values"""
     global search_type
-    print(search_type)
     for i in data_types:
         type_found = str(i) in line
         if type_found == True:
             search_type = "key_vals"
-            print(search_type)
             return str(i)
         
 def key_val_pair_search(line, d_type):
+    """search for metadata values when search_type is set to key_vals,
+    swtich search type to data_type to look for the next data label"""
     global search_type
     if line.startswith("<"):
         if line.startswith("<Deformed$image"):
@@ -61,18 +60,22 @@ def key_val_pair_search(line, d_type):
             search_type = "data_type"
 
 
-
+"""open the metadata file and search through depending on the value of search_type"""
 with open("example_metadata/Test001_19-0kW.m3inp","r") as fi:
     id = []
     for ln in fi:
-        if search_type == "data_type":
-            dat_type = data_type_mark_search(ln)
-        elif search_type == "key_vals":
-            results = key_val_pair_search(ln, dat_type)
+        if ln.startswith("*"):
+            pass
+        else:
+            if search_type == "data_type":
+                dat_type = data_type_mark_search(ln)
+            elif search_type == "key_vals":
+                results = key_val_pair_search(ln, dat_type)
 
 
 mydict = {}
 
+"""assign the right data type to each metadata value"""
 for i in id:
     print(i)
     pair = i[0].split("=")

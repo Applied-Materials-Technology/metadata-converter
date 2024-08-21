@@ -33,6 +33,14 @@ def make_double(val):
     val = val.split(";")
     return val
 
+def shape_case(line):
+    stripped = re.sub("[" + bad_chars + "]", "", line)
+    id.append([stripped[:-1],"d_"])
+
+def extensometer_case(line):
+    stripped = re.sub("[" + bad_chars + "]", "", line)
+    id.append([stripped[:-1],"d_"])
+
 
 def data_type_mark_search(line):
     """search for data type labels when search_type is set to key_vals,
@@ -52,8 +60,11 @@ def key_val_pair_search(line, d_type):
         if line.startswith("<Deformed$image"):
             pass
         elif line.startswith("<Shape>"):
-            stripped = re.sub("[" + bad_chars + "]", "", line)
-            id.append([stripped[:-1],"d_"])
+            #stripped = re.sub("[" + bad_chars + "]", "", line)
+            #id.append([stripped[:-1],"d_"])
+            shape_case(line)
+        elif line.startswith("<Extensometer>"):
+            extensometer_case(line)
         else:
             stripped = re.sub("[" + bad_chars + "]", "", line)
             id.append([stripped[:-1],d_type])
@@ -104,5 +115,5 @@ filleddb.__dict__ = mydict
 
 print(type(filleddb.Strainwindow))
 print(type(filleddb.Delimiter))
-print(filleddb.Shape)
 print(type(filleddb.Automaticexport))
+print(type(filleddb.Shape))

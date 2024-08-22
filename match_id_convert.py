@@ -34,12 +34,36 @@ def make_double(val):
     return val
 
 def shape_case(line):
+    """adds specific marker for non standard form parameter shape"""
     stripped = re.sub("[" + bad_chars + "]", "", line)
-    id.append([stripped[:-1],"d_"])
+    id.append([stripped[:-1],"shape_"])
+
 
 def extensometer_case(line):
+    """adds specific marker for non standard form parameter extensometer"""
     stripped = re.sub("[" + bad_chars + "]", "", line)
-    id.append([stripped[:-1],"d_"])
+    id.append([stripped[:-1],"extens_"])
+
+def shape_list(shape_id, data):
+    list_vals = []
+    if shape_id == 0:
+        shape = "rectangle"
+    elif shape_id == 1:
+        shape = "circle"
+    elif shape_id == 2:
+        shape = "polygon"
+        print(data)
+    elif shape_id == 3:
+        shape = "extensometer"
+    for i in data:
+        try:
+            correct_d_type = make_int(i)
+        except:
+            correct_d_type = make_bool(i)
+        list_vals.append(correct_d_type)
+    return list_vals
+
+
 
 
 def data_type_mark_search(line):
@@ -67,6 +91,7 @@ def key_val_pair_search(line, d_type):
             extensometer_case(line)
         else:
             stripped = re.sub("[" + bad_chars + "]", "", line)
+            #id.append([stripped[:-1],d_type])
             id.append([stripped[:-1],d_type])
             search_type = "data_type"
 
@@ -98,6 +123,15 @@ for i in id:
         mydict[pair[0]] = val
     elif i[1] == "b_":
         val = make_bool(pair[1])
+        mydict[pair[0]] = val
+    elif i[1] == "shape_":
+        val = make_double(pair[1])
+        shape_com = shape_list(int(val[0]), val[1:])
+        print(shape_com)
+        mydict[pair[0]] = val
+    elif i[1] == "extens_":
+        val = make_double(pair[1])
+        #extens_com = extens_list(int(val[0]), val[1:])
         mydict[pair[0]] = val
     else:
         val = pair[1]

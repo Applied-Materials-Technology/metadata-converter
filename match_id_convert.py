@@ -1,4 +1,5 @@
 import re
+import json
 
 
 data_types = ["i_", "b_", "d_", "s_"]
@@ -152,3 +153,10 @@ print(type(filleddb.Delimiter))
 print(type(filleddb.Automaticexport))
 print(type(filleddb.Shape))
 print(filleddb)
+
+print(type(filleddb.Strainwindow))
+#print(mydict)
+with open('dict_save.txt', 'w') as file:
+     file.write(json.dumps(mydict))
+json_data = json.dumps(mydict)
+print(json_data)

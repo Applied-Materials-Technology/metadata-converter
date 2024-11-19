@@ -120,32 +120,33 @@ with open (args.metadatafile, "r") as fi:
 mydict = {}
 
 """assign the right data type to each metadata value"""
-for i in id:
-    print(i)
-    pair = i[0].split("=")
-    if i[1] == "i_":
-        val = make_int(pair[1])
-        mydict[pair[0]] = val
-    elif i[1] == "d_":
-        val = make_double(pair[1])
-        mydict[pair[0]] = val
-    elif i[1] == "b_":
-        val = make_bool(pair[1])
-        mydict[pair[0]] = val
-    elif i[1] == "shape_":
-        val = make_double(pair[1])
-        shape_com = shape_list(int(val[0]), val[1:])
-        print(shape_com)
-        mydict[pair[0]] = val
-    elif i[1] == "extens_":
-        val = make_double(pair[1])
-        #extens_com = extens_list(int(val[0]), val[1:])
-        mydict[pair[0]] = val
-    else:
-        val = pair[1]
-        mydict[pair[0]] = val
+def assign_dtype(id):
+    for i in id:
+        print(i)
+        pair = i[0].split("=")
+        if i[1] == "i_":
+            val = make_int(pair[1])
+            mydict[pair[0]] = val
+        elif i[1] == "d_":
+            val = make_double(pair[1])
+            mydict[pair[0]] = val
+        elif i[1] == "b_":
+            val = make_bool(pair[1])
+            mydict[pair[0]] = val
+        elif i[1] == "shape_":
+            val = make_double(pair[1])
+            shape_com = shape_list(int(val[0]), val[1:])
+            print(shape_com)
+            mydict[pair[0]] = val
+        elif i[1] == "extens_":
+            val = make_double(pair[1])
+            #extens_com = extens_list(int(val[0]), val[1:])
+            mydict[pair[0]] = val
+        else:
+            val = pair[1]
+            mydict[pair[0]] = val
 
-
+assign_dtype(id)
 
 class ExampleDB:
   def __init__(self, name, age):

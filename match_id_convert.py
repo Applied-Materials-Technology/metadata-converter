@@ -1,6 +1,11 @@
 import re
 import json
+import argparse
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--metadatafile", default = "example_metadata/Test001_19-0kW.m3inp", type = str)
+
+args = parser.parse_args()
 
 data_types = ["i_", "b_", "d_", "s_"]
 
@@ -9,6 +14,7 @@ bad_chars = "$<>"
 search_type = "data_type"
 
 bad_chars2 = "_.;"
+
 
 def make_int(val):
     """makes metadata value integer when specified"""
@@ -98,7 +104,8 @@ def key_val_pair_search(line, d_type):
 
 
 """open the metadata file and search through depending on the value of search_type"""
-with open("example_metadata/Test001_19-0kW.m3inp","r") as fi:
+#with open("example_metadata/Test001_19-0kW.m3inp","r") as fi:
+with open (args.metadatafile, "r") as fi:
     id = []
     for ln in fi:
         if ln.startswith("*"):

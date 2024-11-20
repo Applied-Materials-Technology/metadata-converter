@@ -83,14 +83,24 @@ def data_type_mark_search(id, line):
             return str(i)
     return id
 
+#FIX ISSUE WITH ADDING
 def deformed_image_case(id,line):
     #print(line)
+    images = []
     deformed_imgs = line.split()
+    #print(deformed_imgs)
+    """
     for i in deformed_imgs:
         part1 = i.replace('<Deformed$image>=','')
         part2 = part1.split(';')
-        print(part2)
-    #print(deformed_imgs)
+        #print(part2)
+        images.append(part2)"""
+    part1 = deformed_imgs[0].replace('<Deformed$image>=','')
+    part2 = part1.split(';')
+    print(part2)
+    images.append(part2)
+    #id.append([images,"image_"])
+    #print(id)
         
 def key_val_pair_search(id, line, d_type):
     """search for metadata values when search_type is set to key_vals,
@@ -131,29 +141,34 @@ mydict = {}
 
 """assign the right data type to each metadata value"""
 def assign_dtype(id):
-    for i in id:
-        pair = i[0].split("=")
-        if i[1] == "i_":
-            val = make_int(pair[1])
-            mydict[pair[0]] = val
-        elif i[1] == "d_":
-            val = make_double(pair[1])
-            mydict[pair[0]] = val
-        elif i[1] == "b_":
-            val = make_bool(pair[1])
-            mydict[pair[0]] = val
-        elif i[1] == "shape_":
-            val = make_double(pair[1])
-            shape_com = shape_list(int(val[0]), val[1:])
-            #print(shape_com)
-            mydict[pair[0]] = val
-        elif i[1] == "extens_":
-            val = make_double(pair[1])
-            #extens_com = extens_list(int(val[0]), val[1:])
-            mydict[pair[0]] = val
-        else:
-            val = pair[1]
-            mydict[pair[0]] = val
+    try:
+        for i in id:
+            pair = i[0].split("=")
+            if i[1] == "i_":
+                val = make_int(pair[1])
+                mydict[pair[0]] = val
+            elif i[1] == "d_":
+                val = make_double(pair[1])
+                mydict[pair[0]] = val
+            elif i[1] == "b_":
+                val = make_bool(pair[1])
+                mydict[pair[0]] = val
+            elif i[1] == "shape_":
+                val = make_double(pair[1])
+                shape_com = shape_list(int(val[0]), val[1:])
+                #print(shape_com)
+                mydict[pair[0]] = val
+            elif i[1] == "extens_":
+                val = make_double(pair[1])
+                #extens_com = extens_list(int(val[0]), val[1:])
+                mydict[pair[0]] = val
+            elif i[1] == "image_":
+                print("hello")
+            else:
+                val = pair[1]
+                mydict[pair[0]] = val
+    except:
+        pass
 
 assign_dtype(id)
 

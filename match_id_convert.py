@@ -40,13 +40,13 @@ def make_double(val):
     val = val.split(";")
     return val
 
-def shape_case(line):
+def shape_case(id, line):
     """adds specific marker for non standard form parameter shape"""
     stripped = re.sub("[" + bad_chars + "]", "", line)
     id.append([stripped[:-1],"shape_"])
 
 
-def extensometer_case(line):
+def extensometer_case(id, line):
     """adds specific marker for non standard form parameter extensometer"""
     stripped = re.sub("[" + bad_chars + "]", "", line)
     id.append([stripped[:-1],"extens_"])
@@ -59,7 +59,6 @@ def shape_list(shape_id, data):
         shape = "circle"
     elif shape_id == 2:
         shape = "polygon"
-        print(data)
     elif shape_id == 3:
         shape = "extensometer"
     for i in data:
@@ -73,7 +72,7 @@ def shape_list(shape_id, data):
 
 
 
-def data_type_mark_search(line):
+def data_type_mark_search(id, line):
     """search for data type labels when search_type is set to key_vals,
     switch search type to key_vals once label has been found to find paired metadata values"""
     global search_type
@@ -82,20 +81,30 @@ def data_type_mark_search(line):
         if type_found == True:
             search_type = "key_vals"
             return str(i)
+    return id
+
+def deformed_image_case(id,line):
+    #print(line)
+    deformed_imgs = line.split()
+    for i in deformed_imgs:
+        part1 = i.replace('<Deformed$image>=','')
+        part2 = part1.split(';')
+        print(part2)
+    #print(deformed_imgs)
         
-def key_val_pair_search(line, d_type):
+def key_val_pair_search(id, line, d_type):
     """search for metadata values when search_type is set to key_vals,
     swtich search type to data_type to look for the next data label"""
     global search_type
     if line.startswith("<"):
         if line.startswith("<Deformed$image"):
-            pass
+            deformed_image_case(id,line)
         elif line.startswith("<Shape>"):
             #stripped = re.sub("[" + bad_chars + "]", "", line)
             #id.append([stripped[:-1],"d_"])
-            shape_case(line)
+            shape_case(id, line)
         elif line.startswith("<Extensometer>"):
-            extensometer_case(line)
+            extensometer_case(id, line)
         else:
             stripped = re.sub("[" + bad_chars + "]", "", line)
             #id.append([stripped[:-1],d_type])
@@ -104,25 +113,25 @@ def key_val_pair_search(line, d_type):
 
 
 """open the metadata file and search through depending on the value of search_type"""
-#with open("example_metadata/Test001_19-0kW.m3inp","r") as fi:
-with open (args.metadatafile, "r") as fi:
-    id = []
-    for ln in fi:
-        if ln.startswith("*"):
-            pass
-        else:
-            if search_type == "data_type":
-                dat_type = data_type_mark_search(ln)
-            elif search_type == "key_vals":
-                results = key_val_pair_search(ln, dat_type)
+def read_file(metadata):
+    with open (metadata, "r") as fi:
+        id = []
+        for ln in fi:
+            if ln.startswith("*"):
+                pass
+            else:
+                if search_type == "data_type":
+                    dat_type = data_type_mark_search(id, ln)
+                elif search_type == "key_vals":
+                    results = key_val_pair_search(id, ln, dat_type)
+    return id
 
-
+id = read_file(args.metadatafile)
 mydict = {}
 
 """assign the right data type to each metadata value"""
 def assign_dtype(id):
     for i in id:
-        print(i)
         pair = i[0].split("=")
         if i[1] == "i_":
             val = make_int(pair[1])
@@ -136,7 +145,7 @@ def assign_dtype(id):
         elif i[1] == "shape_":
             val = make_double(pair[1])
             shape_com = shape_list(int(val[0]), val[1:])
-            print(shape_com)
+            #print(shape_com)
             mydict[pair[0]] = val
         elif i[1] == "extens_":
             val = make_double(pair[1])
@@ -155,16 +164,15 @@ class ExampleDB:
 
 filleddb = object.__new__(ExampleDB)
 filleddb.__dict__ = mydict
-
+"""
 print(type(filleddb.Strainwindow))
 print(type(filleddb.Delimiter))
 print(type(filleddb.Automaticexport))
 print(type(filleddb.Shape))
-print(filleddb)
 
-print(type(filleddb.Strainwindow))
+print(type(filleddb.Strainwindow))"""
 #print(mydict)
 with open('dict_save.txt', 'w') as file:
      file.write(json.dumps(mydict))
 json_data = json.dumps(mydict)
-print(json_data)
+#print(json_data)

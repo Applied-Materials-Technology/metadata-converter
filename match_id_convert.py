@@ -83,24 +83,14 @@ def data_type_mark_search(id, line):
             return str(i)
     return id
 
+
 #FIX ISSUE WITH ADDING
-def deformed_image_case(id,line):
-    #print(line)
-    images = []
+def deformed_image_case(id, line):
     deformed_imgs = line.split()
-    #print(deformed_imgs)
-    """
-    for i in deformed_imgs:
-        part1 = i.replace('<Deformed$image>=','')
-        part2 = part1.split(';')
-        #print(part2)
-        images.append(part2)"""
-    part1 = deformed_imgs[0].replace('<Deformed$image>=','')
-    part2 = part1.split(';')
-    print(part2)
-    images.append(part2)
-    #id.append([images,"image_"])
-    #print(id)
+    part1 = deformed_imgs[0].replace('<Deformed$image>=','DeformedImage=')
+    id.append([part1, "image_"])
+    #images.append([part1])
+    return id
         
 def key_val_pair_search(id, line, d_type):
     """search for metadata values when search_type is set to key_vals,
@@ -137,7 +127,10 @@ def read_file(metadata):
     return id
 
 id = read_file(args.metadatafile)
+#id.append([images,"_image"])
 mydict = {}
+#print(id)
+#print(images)
 
 """assign the right data type to each metadata value"""
 def assign_dtype(id):
@@ -164,6 +157,8 @@ def assign_dtype(id):
                 mydict[pair[0]] = val
             elif i[1] == "image_":
                 print("hello")
+                val = make_double(pair[1])
+                mydict[pair[0]] = val
             else:
                 val = pair[1]
                 mydict[pair[0]] = val
@@ -190,4 +185,4 @@ print(type(filleddb.Strainwindow))"""
 with open('dict_save.txt', 'w') as file:
      file.write(json.dumps(mydict))
 json_data = json.dumps(mydict)
-#print(json_data)
+print(json_data)

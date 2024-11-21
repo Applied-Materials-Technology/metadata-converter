@@ -87,9 +87,8 @@ def data_type_mark_search(id, line):
 #FIX ISSUE WITH ADDING
 def deformed_image_case(id, line):
     deformed_imgs = line.split()
-    part1 = deformed_imgs[0].replace('<Deformed$image>=','DeformedImage=')
-    id.append([part1, "image_"])
-    #images.append([part1])
+    part = deformed_imgs[0].replace('<Deformed$image>=','DeformedImage=')
+    id.append([part, "image_"])
     return id
         
 def key_val_pair_search(id, line, d_type):
@@ -100,14 +99,11 @@ def key_val_pair_search(id, line, d_type):
         if line.startswith("<Deformed$image"):
             deformed_image_case(id,line)
         elif line.startswith("<Shape>"):
-            #stripped = re.sub("[" + bad_chars + "]", "", line)
-            #id.append([stripped[:-1],"d_"])
             shape_case(id, line)
         elif line.startswith("<Extensometer>"):
             extensometer_case(id, line)
         else:
             stripped = re.sub("[" + bad_chars + "]", "", line)
-            #id.append([stripped[:-1],d_type])
             id.append([stripped[:-1],d_type])
             search_type = "data_type"
 
@@ -127,10 +123,8 @@ def read_file(metadata):
     return id
 
 id = read_file(args.metadatafile)
-#id.append([images,"_image"])
 mydict = {}
-#print(id)
-#print(images)
+images = []
 
 """assign the right data type to each metadata value"""
 def assign_dtype(id):
@@ -149,16 +143,13 @@ def assign_dtype(id):
             elif i[1] == "shape_":
                 val = make_double(pair[1])
                 shape_com = shape_list(int(val[0]), val[1:])
-                #print(shape_com)
                 mydict[pair[0]] = val
             elif i[1] == "extens_":
                 val = make_double(pair[1])
-                #extens_com = extens_list(int(val[0]), val[1:])
                 mydict[pair[0]] = val
             elif i[1] == "image_":
-                print("hello")
                 val = make_double(pair[1])
-                mydict[pair[0]] = val
+                images.append(val)
             else:
                 val = pair[1]
                 mydict[pair[0]] = val
@@ -166,6 +157,7 @@ def assign_dtype(id):
         pass
 
 assign_dtype(id)
+mydict["DeformedImages"] = images
 
 class ExampleDB:
   def __init__(self, name, age):
@@ -186,3 +178,4 @@ with open('dict_save.txt', 'w') as file:
      file.write(json.dumps(mydict))
 json_data = json.dumps(mydict)
 print(json_data)
+#print(images)

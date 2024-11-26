@@ -1,20 +1,29 @@
+from pathlib import Path
+from dataclasses import dataclass
 import re
 import json
 import argparse
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--metadatafile", default = "example_metadata/Test001_19-0kW.m3inp", type = str)
-
-args = parser.parse_args()
-
-data_types = ["i_", "b_", "d_", "s_"]
-
-bad_chars = "$<>"
-
-search_type = "data_type"
-
-bad_chars2 = "_.;"
-
+# TODO - metadata
+# Check everything works for *.m2inp and *.m3inp
+# - Extract "Stereo" or "2D" if the word stereo is not found in the header
+#   - if "stereo" in 2nd row
+#   - "Input Type": "2D" | "Stereo"
+# - Extract version number of the software e.g. "2024.1.0" as
+#    - "Version": "2024.1.0"
+# - Camera Intrinsic:
+#   - Split list into separate parameters:
+#    - "Camera1Intrinsic"
+#       - "Fx": 19488.99
+#       - "Fy": 19487.46
+# -
+# - Camera Extrinsic as above - split list into sub dicttionary
+# - Remove path from image list - keep other parameters
+# - Remove <> from image list
+# - Add support for multiple shape in the region of interest
+#   - RegionOfInterest:
+#        - Shape: list[]
+#        - Shape: list[]
 
 def make_int(val):
     """makes metadata value integer when specified"""
@@ -70,8 +79,6 @@ def shape_list(shape_id, data):
     return list_vals
 
 
-
-
 def data_type_mark_search(id, line):
     """search for data type labels when search_type is set to key_vals,
     switch search type to key_vals once label has been found to find paired metadata values"""
@@ -90,11 +97,11 @@ def deformed_image_case(id, line):
     part = deformed_imgs[0].replace('<Deformed$image>=','DeformedImage=')
     id.append([part, "image_"])
     return id
-        
-def key_val_pair_search(id, line, d_type):
+
+def key_val_pair_search(id, line: str, d_type, search_type) -> str:
     """search for metadata values when search_type is set to key_vals,
     swtich search type to data_type to look for the next data label"""
-    global search_type
+
     if line.startswith("<"):
         if line.startswith("<Deformed$image"):
             deformed_image_case(id,line)
@@ -107,10 +114,12 @@ def key_val_pair_search(id, line, d_type):
             id.append([stripped[:-1],d_type])
             search_type = "data_type"
 
+    return search_type
+
 
 """open the metadata file and search through depending on the value of search_type"""
-def read_file(metadata):
-    with open (metadata, "r") as fi:
+def extract_metadata(metadata_path: Path) -> :
+    with open (metadata_path, "r") as fi:
         id = []
         for ln in fi:
             if ln.startswith("*"):
@@ -119,12 +128,10 @@ def read_file(metadata):
                 if search_type == "data_type":
                     dat_type = data_type_mark_search(id, ln)
                 elif search_type == "key_vals":
-                    results = key_val_pair_search(id, ln, dat_type)
+                    key_val_pair_search(id, ln, dat_type)
     return id
 
-id = read_file(args.metadatafile)
-mydict = {}
-images = []
+
 
 """assign the right data type to each metadata value"""
 def assign_dtype(id):
@@ -156,26 +163,43 @@ def assign_dtype(id):
     except:
         pass
 
-assign_dtype(id)
-mydict["DeformedImages"] = images
 
-class ExampleDB:
-  def __init__(self, name, age):
-    self.name = name
-    self.age = age
+@dataclass
+class MatchIDFormat
+    data_types: tuple[str,str,str,str] = ("i_", "b_", "d_", "s_")
+    bad_chars: str = "$<>"
+    bad_chars2: str = "_.;"
 
-filleddb = object.__new__(ExampleDB)
-filleddb.__dict__ = mydict
-"""
-print(type(filleddb.Strainwindow))
-print(type(filleddb.Delimiter))
-print(type(filleddb.Automaticexport))
-print(type(filleddb.Shape))
 
-print(type(filleddb.Strainwindow))"""
-#print(mydict)
-with open('dict_save.txt', 'w') as file:
-     file.write(json.dumps(mydict))
-json_data = json.dumps(mydict)
-print(json_data)
-#print(images)
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--metadatafile", default = "example_metadata/Test001_19-0kW.m3inp", type = str)
+    args = parser.parse_args()
+
+
+    search_type: str = "data_type"
+
+    id = extract_metadata(Path(args.metadatafile))
+
+    mydict = {}
+    images = []
+    assign_dtype(id)
+    mydict["DeformedImages"] = images
+
+    class ExampleDB:
+        def __init__(self, name, age):
+            self.name = name
+            self.age = age
+
+    filleddb = object.__new__(ExampleDB)
+    filleddb.__dict__ = mydict
+
+    with open(Path("dict_save.json"), 'w',encoding="utf-8") as file:
+        json.dump(mydict,file,indent=4)
+
+    json_data = json.dumps(mydict)
+    print(json_data)
+
+if __name__ == "__main__":
+    main()

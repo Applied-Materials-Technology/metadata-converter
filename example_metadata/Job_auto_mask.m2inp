@@ -1,0 +1,257 @@
+*****************************************************************
+**                 MatchID Input file 2025.1.0                **
+**                ---------------------------                  **
+** Structure of File: <Parameter_name>=<Value>                 **
+** %-symbol indicates that the line is considered as a comment **
+** i_ : integer value required                                 **
+** b_ : boolean value required (true/false)                    **
+** d_ : double value required                                  **
+** s_ : string value required                                  **
+*****************************************************************
+
+
+$Run as matchid.exe "F:\datapipe\data\imagesdef\Job.m2inp"
+
+
+$View as matchid.exe -show "F:\datapipe\data\imagesdef\Job.m2inp"
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% s_Filename Reference Image
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Reference$image>=<F:\datapipe\data\imagesdef\Image_0000.tiff>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% <Deformed$image> = 
+%%%%%% 	 <s_FullPathOfDeformedImage; i_NumberOfROIs;i_IndexOfROI_1;i_IndexSeed;s_GuessROI1;  i_ArrayOfGuessValuesROI1; ...; i_IndexOfROI_N; ...; i_ArrayOfGuessValuesROI1>
+%%%%%% 
+%%%%%% Remarks:
+%%%%%% i_IndexSeed: 0 refers to the InitialSubset. Other indices should comply with the ones in the extra seed list.
+%%%%%% i_ArrayOfGuessValuesROI:
+%%%%%% 	 if (s_GuessROI == None) i_ArrayOfGuessValuesROI should be omitted. 
+%%%%%% 	 if (s_GuessROI == Translation) i_ArrayOfGuessValuesROI= [i_guess_Horizontal;i_guess_Vertical] 
+%%%%%% 	 if (s_GuessROI == Complete) i_ArrayOfGuessValuesROI= [i_guess_H_1; i_guess_V_1; i_guess_H_2; i_guess_V_2;i_guess_H_3; i_guess_V_3] 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Deformed$image>=<F:\datapipe\data\imagesdef\Image_0001.tiff;1;0;0;None>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% i_Methodology
+%%%%%%  Subset-Based = 0, Grid = 1, Mesh-Based = 2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Methodology>=<0>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% i_Global Step Size [pixels]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Step$size>=<10>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% i_Global Subset Size [pixels]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Subset$size>=<21>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% i_Correlation Algorithm
+%%%%%%  NSSD = 0, ANSSD = 1, ZNSSD = 5
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Correlation>=<5>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% i_Subset Weight
+%%%%%%  Uniform = 0, Gaussian = 1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<SubsetWeight>=<0>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% b_Allow Partial Subsets
+%%%%%% True, False
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<AllowPartialSubsets>=<False>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% i_Grey value Interpolation
+%%%%%%   Bilinear = 3,  Bicubic = 4, Global Bicubic spline = 5, Local Bicubic spline = 6
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Interpolation>=<6>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% i_Global subset Transformation order
+%%%%%%  rigid = 0, affine = 1, irreg = 2,  quadratic = 3
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Transformation>=<1>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% d_Convergence precision
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Precision>=<0.001>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% i_Maximum Iterations
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Iterations>=<20>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% d_Correlation Treshold
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Correlation$treshold>=<0.9>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% b_Missing data compensation
+%%%%%% False, True
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Missing$data>=<True>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% b_Subset overlap skipping
+%%%%%% False, True
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<SkipOverlap>=<True>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% i_Estimated Maximal rigid body displacement [pixels] 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Maximal$rigid>=<100>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% s_Estimated Strain (small, medium, large)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Estimated$strain>=<small>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% i_Progress History
+%%%%%% Full Scan = 0, Spatial = 1, Spatial + Update Reference = 2 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<History>=<1>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% b_Optimized scanning method
+%%%%%% False, True
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Optimized$scanning>=<True>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% i_choice of noise handling
+%%%%%%  None = 0, Averaging = 1, Gaussian = 2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Noise>=<2>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% i_Kernel Size Gaussian Smoothing
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Kernel$size>=<5>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% i_Number of processors
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Processors>=<64>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% d_Camera  intrinsic parameters 
+%%%%%% Order: Fx, Fy, Fs, K1, K2, K3, P1, P2, Cx, Cy, Xoffset, Yoffset 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Cameraintrinsic>=<0;0;0;0;0;0;0;0;0;0;0;0>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% i_Number of distortions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Distortions>=<0>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% b_Automatic strain
+%%%%%% False, True
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Automatic$strain>=<False>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% i_Size of strain window [pixels]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Strain$window>=<5>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% i_Point Tolerance (%)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Point$tolerance>=<0>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% i_Strain Convention
+%%%%%% GreenLagrange = 0, LOGEulerAlmansi = 1, Euler = 2, Henky = 3
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Strain$convention>=<1>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% i_Strain Interpolation
+%%%%%% Q4 = 0, Q8 = 1, Q9 = 2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Strain$interpolation>=<0>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% b_Automatic exporting
+%%%%%% False, True
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Automatic$export>=<False>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% i_Exporting format
+%%%%%% standard = 0, matrix = 1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Export$format>=<0>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% s_Path of output files
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Output$path>=<F:\datapipe\data\imagesdef>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% i_Exporting unit
+%%%%%% pixels = 0, mm = 1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Export$unit>=<0>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% d_Pixel to mm conversion
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Conversion>=<1>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% s_Delimiter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Delimiter>=<,>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% b_WriteStats
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<StoreStats>=<False>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% <Shape> or <Extensometer>
+%%%%%% <Shape>=
+%%%%%% 	 Rectangle: <0; i_IndexOfROI; b_Type; i_X_UpperLeft; i_Y_UpperLeft; i_Width; i_Height; i_X_InitialSubset; i_Y_InitialSubset;[Optional: i_LocalSubsetSize; i_LocalStepSize; i_LocalShapeFunction]>
+%%%%%% 	 Circle: <1; i_IndexOfROI; b_Type; i_X_Centre; i_Y_Centre; i_Radius; [3 control points] i_X1; i_Y1;i_X2; i_Y2; i_X3; i_Y3; i_X_InitialSubset; i_Y_InitialSubset;[Optional: i_LocalSubsetSize; i_LocalStepSize; i_LocalShapeFunction]>
+%%%%%% 	 Polygon: <2; i_IndexOfROI; b_Type; i_Number_of_control_points; [N control points] i_X1; i_Y1; ... ;i_X_N; i_YN; i_X_InitialSubset; i_Y_InitialSubset; [Optional: i_LocalSubsetSize; i_LocalStepSize; i_LocalShapeFunction]>
+%%%%%% <Extensometer>=
+%%%%%% 	 <3; i_IndexOfROI_Marker1; i_Marker1_X; i_Marker1_Y);i_IndexOfROI_Marker2; i_Marker2_X;i_Marker2_Y; [Optional: i_LocalSubsetSize; i_LocalShapeFunction]>
+%%%%%% 
+%%%%%% Remarks:
+%%%%%% 	 IndexOfROI:  Index of the ROI. Index should comply to the initial guess indices of the deformed images 
+%%%%%% 	 Type:  Cutting = True, Selection = False;
+%%%%%% 	 If Cutting = True, the initialsubset positions can be omitted. 
+%%%%%% 	 LocalSubsetSize/LocalStepSize/LocalShapeFunction can be omitted in the definition above. In that case the global settings are adopted.  Local definitions overrule the global definitions. In that case, ALL of local definitions must be present! 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<Shape>=<0;0;False;0;0;2464;2056;1230;670>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% Automask settings per ROI
+%%%%%% <AutoMask> = <i_IndexOfROI;i_TypeOfAutomasking; d_Threshold>
+%%%%%% <AutoMask> = <i_IndexOfROI;i_TypeOfAutomasking; s_MaskImage>
+%%%%%% Remarks:
+%%%%%% 	 IndexOfROI:  Index of the ROI. Index should comply to the ones of the shapes. 
+%%%%%% 	 i_TypeOfAutomasking:  Type of automasking. 3 for speckle based detection, 5 for mask image 
+%%%%%% 	 d_Threshold:  Threshold value for automasking type 3. Should be between 0 and 1.
+%%%%%% 	 s_MaskImage:  Masking image for automasking type 5. Pixels with gray level 0 are excluded, higher than 0 included.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<AutoMask>=<0;5;F:\datapipe\data\imagesdef\Job.m2inp_MaskShape_0.tiff>
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% Number of extra seed points per ROI and their initial locations
+%%%%%% <Seed$Points> = <i_IndexOfROI;i_NumberOfExtraSeeds; i_X1;i_Y1; ... i_XN; i_YN
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

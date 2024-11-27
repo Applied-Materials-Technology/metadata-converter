@@ -20,7 +20,6 @@ class MetadataConverter:
     """open the metadata file and search through depending on the value of search_type"""
     def extract_metadata(self, metadata: Path):
         with open (metadata, "r") as fi:
-            id = []
             for ln in fi:
                 if ln.startswith("*"):
                     version_info = "MatchID" in ln
@@ -31,10 +30,9 @@ class MetadataConverter:
                         self._mydict["Version"] = version
                 else:
                     if self._search_type == "data_type":
-                        dat_type = self.data_type_mark_search(id, ln)
+                        dat_type = self.data_type_mark_search(ln)
                     elif self._search_type == "key_vals":
-                        results = self.key_val_pair_search(id, ln, dat_type)
-        #self.assign_dtype(id)
+                        results = self.key_val_pair_search(ln, dat_type)
 
     def make_int(self, val):
         """makes metadata value integer when specified"""
@@ -44,18 +42,16 @@ class MetadataConverter:
 
     def make_str(self, val):
         """makes metadata value string when specified"""
-        #stripped_val = re.sub("[" + self._params.bad_chars2 + "]", "", val)
         stripped_val = re.sub("[" + "\n" + "]", "", val)
-        print(stripped_val)
-        #val = str(val)
         val = str(stripped_val)
         return val
 
     def make_bool(self, val):
         """makes metadata value boolean when specified"""
-        if val == "True":
+        stripped_val = re.sub("[" + "\n" + "]", "", val)
+        if stripped_val == "True":
             boolval = True
-        elif val == "False":
+        elif stripped_val == "False":
             boolval = False
         return boolval
 
@@ -67,20 +63,31 @@ class MetadataConverter:
         for i in range(len(val)):
             val[i] = float(val[i])
         return val
-        #return stripped_vals
+    
+    def make_list(self, val):
+        val = val.split(";")
+        stripped_val = re.sub("[" + "\n" + "]", "", val[-1])
+        val[-1] = stripped_val
+        for i in range(len(val)):
+            val[i] = (val[i])
+        return val
 
-    def shape_case(self, id, line):
+    def shape_case(self, line):
         """adds specific marker for non standard form parameter shape"""
         stripped = re.sub("[" + self._params.bad_chars + "]", "", line)
-        id.append([stripped[:-1],"shape_"])
+        return stripped
 
 
-    def extensometer_case(self, id, line):
+    def extensometer_case(self, line):
         """adds specific marker for non standard form parameter extensometer"""
         stripped = re.sub("[" + self._params.bad_chars + "]", "", line)
-        id.append([stripped[:-1],"extens_"])
+        return stripped
 
     def shape_list(self, shape_id, data):
+        data = data.split(";")
+        stripped_val = re.sub("[" + "\n" + "]", "", data[-1])
+        data[-1] = stripped_val
+        data.remove("")
         list_vals = []
         if shape_id == 0:
             shape = "rectangle"
@@ -101,16 +108,14 @@ class MetadataConverter:
 
 
 
-    def data_type_mark_search(self, id, line):
+    def data_type_mark_search(self, line):
         """search for data type labels when search_type is set to key_vals,
         switch search type to key_vals once label has been found to find paired metadata values"""
         for i in self._params.data_types:
             type_found = str(i) in line
             if type_found == True:
-                #self.check_for_order(line)
                 self._search_type = "key_vals"
                 return str(i)
-        return id
 
     def check_for_order(self,line):
         """check for order param names"""
@@ -118,30 +123,33 @@ class MetadataConverter:
         print(line)
 
     #FIX ISSUE WITH ADDING
-    def deformed_image_case(self, id, line):
+    def deformed_image_case(self, line):
         deformed_imgs = line.split()
         part = deformed_imgs[0].replace('<Deformed$image>=','DeformedImage=')
-        id.append([part, "image_"])
             
-    def key_val_pair_search(self, id, line, d_type):
+    def key_val_pair_search(self, line, d_type):
         """search for metadata values when search_type is set to key_vals,
         swtich search type to data_type to look for the next data label"""
         if line.startswith("<"):
             if line.startswith("<Deformed$image"):
-                self.deformed_image_case(id,line)
+                #stripped = self.deformed_image_case(line)
+                pass
             elif line.startswith("<Shape>"):
-                self.shape_case(id, line)
+                stripped = self.shape_case(line)
+                d_type = "shape_"
+                self.write_to_dict(stripped, d_type)
             elif line.startswith("<Extensometer>"):
-                self.extensometer_case(id, line)
+                stripped = self.extensometer_case(line)
+                self.write_to_dict(stripped, d_type)
             else:
                 stripped = re.sub("[" + self._params.bad_chars + "]", "", line)
-                id.append([stripped[:-1],d_type])
-                pair = stripped.split("=")
-                #self._mydict[stripped[:-1]] = line
-                value = self.assign_dtype(pair[1], d_type, pair[0])
-                self._mydict[pair[0]] = value
-                #self._mydict[pair[0]] = pair[1]
-                self._search_type = "data_type"
+                self.write_to_dict(stripped, d_type)
+
+    def write_to_dict(self, stripped, d_type):
+        pair = stripped.split("=")
+        value = self.assign_dtype(pair[1], d_type, pair[0])
+        self._mydict[pair[0]] = value
+        self._search_type = "data_type"
 
 
 
@@ -158,14 +166,10 @@ class MetadataConverter:
                 val = self.make_double(data)
                 return val
             elif d_type == "b_":
-                text = "im a bool"
-                print("activate bool")
                 val = self.make_bool(data)
-                print(val)
-                return text
+                return val
             elif d_type == "shape_":
-                val = self.make_double(data)
-                shape_com = self.shape_list(int(val[0]), val[1:])
+                val = self.shape_list(int(data[0]), data[1:])
                 return val
             elif d_type == "extens_":
                 val = self.make_double(data)
@@ -180,41 +184,10 @@ class MetadataConverter:
             pass
         self.save_data()
 
-    """assign the right data type to each metadata value"""
-    def assign_dtype_ori(self, id):
-        try:
-            for i in id:
-                pair = i[0].split("=")
-                if i[1] == "i_":
-                    val = self.make_int(pair[1])
-                    self._mydict[pair[0]] = val
-                elif i[1] == "d_":
-                    val = self.make_double(pair[1])
-                    self._mydict[pair[0]] = val
-                elif i[1] == "b_":
-                    val = self.make_bool(pair[1])
-                    self._mydict[pair[0]] = val
-                elif i[1] == "shape_":
-                    val = self.make_double(pair[1])
-                    shape_com = self.shape_list(int(val[0]), val[1:])
-                    self._mydict[pair[0]] = val
-                elif i[1] == "extens_":
-                    val = self.make_double(pair[1])
-                    self._mydict[pair[0]] = val
-                elif i[1] == "image_":
-                    val = self.make_double(pair[1])
-                    self._images.append(val)
-                else:
-                    val = pair[1]
-                    self._mydict[pair[0]] = val
-        except:
-            pass
-        self.save_data()
 
     def save_data(self):
         with open(Path("dict_save2.json"), 'w',encoding="utf-8") as file:
             json.dump(self._mydict,file,indent=4)
-
 
 
 def main() -> None:

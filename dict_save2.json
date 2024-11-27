@@ -54,10 +54,10 @@
     "Correlationtreshold": [
         0.9
     ],
-    "Missingdata": null,
+    "Missingdata": false,
     "Maximalrigid": 100,
     "Estimatedstrain": "small",
-    "Largeangles": null,
+    "Largeangles": false,
     "History": 1,
     "Noise": 2,
     "Kernelsize": 5,
@@ -65,18 +65,33 @@
         5.0
     ],
     "Epipolarerror": 10,
-    "Triangulationoptimization": null,
+    "Triangulationoptimization": false,
     "Processors": 32,
     "Coordinatetransformation": 1,
-    "Rescaled": null,
-    "Automaticstrain": null,
+    "Rescaled": true,
+    "Automaticstrain": false,
     "Strainwindow": 5,
     "Pointtolerance": 0,
     "Strainconvention": 1,
     "Straininterpolation": 0,
-    "Automaticexport": null,
+    "Automaticexport": false,
     "Exportformat": 0,
     "Outputpath": "C:\\TempWorkingDirectory\\AdelTayeb\\HIVE\\HIVE_Data_04_07_2023\\04_07\\Pulse_19KW",
     "DataStorage": 1,
-    "Delimiter": ","
+    "Delimiter": ",",
+    "Shape": [
+        0,
+        false,
+        4,
+        1992,
+        1970,
+        2539,
+        1970,
+        2539,
+        3322,
+        1992,
+        3322,
+        2266,
+        2653
+    ]
 }

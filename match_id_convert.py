@@ -115,12 +115,15 @@ class MetadataConverter:
             type_found = str(i) in line
             if type_found == True:
                 self._search_type = "key_vals"
+                self.check_for_order(line)
                 return str(i)
 
-    def check_for_order(self,line):
+    def check_for_order(self,line):#should check line + 1
         """check for order param names"""
-        order_true = "Order:" in line
-        print(line)
+        has_order = "Order: " in line
+        if has_order == True:
+            print(line)
+            return(line)
 
     #FIX ISSUE WITH ADDING
     def deformed_image_case(self, line):

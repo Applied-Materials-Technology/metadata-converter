@@ -1,4 +1,6 @@
 {
+    "InputType": "Stereo",
+    "Version": "2024.1.0",
     "Camera0index": "_0.",
     "Camera1index": "_1.",
     "Camera0intrinsic": [

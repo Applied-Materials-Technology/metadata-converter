@@ -23,13 +23,17 @@ class MetadataConverter:
             id = []
             for ln in fi:
                 if ln.startswith("*"):
-                    pass
+                    version_info = "MatchID" in ln
+                    if version_info == True:
+                        inp_type = re.search('MatchID (.+?) Input', ln).group(1)
+                        version = re.search('file (.+?) ', ln).group(1)
+                        self._mydict["InputType"] = inp_type
+                        self._mydict["Version"] = version
                 else:
                     if self._search_type == "data_type":
                         dat_type = self.data_type_mark_search(id, ln)
                     elif self._search_type == "key_vals":
                         results = self.key_val_pair_search(id, ln, dat_type)
-        #return id
         self.assign_dtype(id)
 
     def make_int(self, val):
@@ -91,26 +95,29 @@ class MetadataConverter:
     def data_type_mark_search(self, id, line):
         """search for data type labels when search_type is set to key_vals,
         switch search type to key_vals once label has been found to find paired metadata values"""
-        #global search_type
         for i in self._params.data_types:
             type_found = str(i) in line
             if type_found == True:
+                #self.check_for_order(line)
                 self._search_type = "key_vals"
                 return str(i)
         return id
 
+    def check_for_order(self,line):
+        """check for order param names"""
+        order_true = "Order:" in line
+        print(line)
 
     #FIX ISSUE WITH ADDING
     def deformed_image_case(self, id, line):
         deformed_imgs = line.split()
         part = deformed_imgs[0].replace('<Deformed$image>=','DeformedImage=')
         id.append([part, "image_"])
-        return id
+        #return id
             
     def key_val_pair_search(self, id, line, d_type):
         """search for metadata values when search_type is set to key_vals,
         swtich search type to data_type to look for the next data label"""
-        global search_type
         if line.startswith("<"):
             if line.startswith("<Deformed$image"):
                 self.deformed_image_case(id,line)
@@ -162,14 +169,6 @@ class MetadataConverter:
             json.dump(self._mydict,file,indent=4)
 
 
-class ExampleDB:
-  def __init__(self, name, age):
-    self.name = name
-    self.age = age
-
-filleddb = object.__new__(ExampleDB)
-#filleddb.__dict__ = mydict
-
 
 def main() -> None:
     parser = argparse.ArgumentParser()
@@ -179,9 +178,8 @@ def main() -> None:
     meta_convert_params = MatchIDFormat()
     metadata_object = MetadataConverter(meta_convert_params)
 
-    id = metadata_object.extract_metadata(Path(args.metadatafile))
+    metadata_object.extract_metadata(Path(args.metadatafile))
 
-    #json_data = json.dumps(id._mydict)
 
 if __name__ == "__main__":
     main()

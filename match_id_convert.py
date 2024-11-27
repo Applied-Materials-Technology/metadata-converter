@@ -34,7 +34,7 @@ class MetadataConverter:
                         dat_type = self.data_type_mark_search(id, ln)
                     elif self._search_type == "key_vals":
                         results = self.key_val_pair_search(id, ln, dat_type)
-        self.assign_dtype(id)
+        #self.assign_dtype(id)
 
     def make_int(self, val):
         """makes metadata value integer when specified"""
@@ -44,7 +44,11 @@ class MetadataConverter:
 
     def make_str(self, val):
         """makes metadata value string when specified"""
-        val = str(val)
+        #stripped_val = re.sub("[" + self._params.bad_chars2 + "]", "", val)
+        stripped_val = re.sub("[" + "\n" + "]", "", val)
+        print(stripped_val)
+        #val = str(val)
+        val = str(stripped_val)
         return val
 
     def make_bool(self, val):
@@ -58,7 +62,12 @@ class MetadataConverter:
     def make_double(self, val):
         """splits metadata value into list of individual values when specified"""
         val = val.split(";")
+        stripped_val = re.sub("[" + "\n" + "]", "", val[-1])
+        val[-1] = stripped_val
+        for i in range(len(val)):
+            val[i] = float(val[i])
         return val
+        #return stripped_vals
 
     def shape_case(self, id, line):
         """adds specific marker for non standard form parameter shape"""
@@ -113,7 +122,6 @@ class MetadataConverter:
         deformed_imgs = line.split()
         part = deformed_imgs[0].replace('<Deformed$image>=','DeformedImage=')
         id.append([part, "image_"])
-        #return id
             
     def key_val_pair_search(self, id, line, d_type):
         """search for metadata values when search_type is set to key_vals,
@@ -128,13 +136,52 @@ class MetadataConverter:
             else:
                 stripped = re.sub("[" + self._params.bad_chars + "]", "", line)
                 id.append([stripped[:-1],d_type])
+                pair = stripped.split("=")
+                #self._mydict[stripped[:-1]] = line
+                value = self.assign_dtype(pair[1], d_type, pair[0])
+                self._mydict[pair[0]] = value
+                #self._mydict[pair[0]] = pair[1]
                 self._search_type = "data_type"
 
 
 
+    """assign the right data type to each metadata value"""
+    def assign_dtype(self, data, d_type, name):
+        try:
+            if d_type == "i_":
+                val = self.make_int(data)
+                return val
+            elif d_type == "s_":
+                val = self.make_str(data)
+                return val
+            elif d_type == "d_":
+                val = self.make_double(data)
+                return val
+            elif d_type == "b_":
+                text = "im a bool"
+                print("activate bool")
+                val = self.make_bool(data)
+                print(val)
+                return text
+            elif d_type == "shape_":
+                val = self.make_double(data)
+                shape_com = self.shape_list(int(val[0]), val[1:])
+                return val
+            elif d_type == "extens_":
+                val = self.make_double(data)
+                return val
+            elif d_type == "image_":
+                val = self.make_double(data)
+                return val
+            else:
+                val = data
+                return val
+        except:
+            pass
+        self.save_data()
 
     """assign the right data type to each metadata value"""
-    def assign_dtype(self, id):
+    def assign_dtype_ori(self, id):
         try:
             for i in id:
                 pair = i[0].split("=")
@@ -165,7 +212,7 @@ class MetadataConverter:
         self.save_data()
 
     def save_data(self):
-        with open(Path("dict_save.json"), 'w',encoding="utf-8") as file:
+        with open(Path("dict_save2.json"), 'w',encoding="utf-8") as file:
             json.dump(self._mydict,file,indent=4)
 
 
@@ -179,6 +226,7 @@ def main() -> None:
     metadata_object = MetadataConverter(meta_convert_params)
 
     metadata_object.extract_metadata(Path(args.metadatafile))
+    metadata_object.save_data()
 
 
 if __name__ == "__main__":

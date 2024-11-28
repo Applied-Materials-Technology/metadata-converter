@@ -33,14 +33,15 @@ class MetadataConverter:
                     if self._search_type == "data_type":
                         dat_type = self.data_type_mark_search(ln)
                     elif self._search_type == "key_vals":
-                        #print(self._order)
                         results = self.key_val_pair_search(ln, dat_type)
+                        self._order = None
                     elif self._search_type == "check_order":
-                        self._order = self.check_for_order(ln)
-                        if self._order != None:
-                            print(self._order)
+                        order = self.check_for_order(ln)
+                        if order != None:
+                            self._order = order
                             self._order = re.sub("[" + "% Order: " + "]", "", ln)
                             self._order = self._order.split(",")
+
 
     def make_int(self, val):
         """makes metadata value integer when specified"""
@@ -129,10 +130,7 @@ class MetadataConverter:
         """check for order param names"""
         has_order = "Order: " in line
         if has_order == True:
-            #print(line)
-            #self._order = line
             return line
-        #print(self._order)
         self._search_type = "key_vals"
 
     #FIX ISSUE WITH ADDING
@@ -143,7 +141,6 @@ class MetadataConverter:
     def key_val_pair_search(self, line, d_type):
         """search for metadata values when search_type is set to key_vals,
         swtich search type to data_type to look for the next data label"""
-        #print(self._order)
         if line.startswith("<"):
             if line.startswith("<Deformed$image"):
                 #stripped = self.deformed_image_case(line)

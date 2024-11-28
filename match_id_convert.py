@@ -16,6 +16,7 @@ class MetadataConverter:
         self._mydict: dict = {}
         self._images: list = []
         self._search_type: str = "data_type"
+        self._order = None
 
     """open the metadata file and search through depending on the value of search_type"""
     def extract_metadata(self, metadata: Path):
@@ -32,7 +33,14 @@ class MetadataConverter:
                     if self._search_type == "data_type":
                         dat_type = self.data_type_mark_search(ln)
                     elif self._search_type == "key_vals":
+                        #print(self._order)
                         results = self.key_val_pair_search(ln, dat_type)
+                    elif self._search_type == "check_order":
+                        self._order = self.check_for_order(ln)
+                        if self._order != None:
+                            print(self._order)
+                            self._order = re.sub("[" + "% Order: " + "]", "", ln)
+                            self._order = self._order.split(",")
 
     def make_int(self, val):
         """makes metadata value integer when specified"""
@@ -114,16 +122,18 @@ class MetadataConverter:
         for i in self._params.data_types:
             type_found = str(i) in line
             if type_found == True:
-                self._search_type = "key_vals"
-                self.check_for_order(line)
+                self._search_type = "check_order"
                 return str(i)
 
-    def check_for_order(self,line):#should check line + 1
+    def check_for_order(self,line):
         """check for order param names"""
         has_order = "Order: " in line
         if has_order == True:
-            print(line)
-            return(line)
+            #print(line)
+            #self._order = line
+            return line
+        #print(self._order)
+        self._search_type = "key_vals"
 
     #FIX ISSUE WITH ADDING
     def deformed_image_case(self, line):
@@ -133,6 +143,7 @@ class MetadataConverter:
     def key_val_pair_search(self, line, d_type):
         """search for metadata values when search_type is set to key_vals,
         swtich search type to data_type to look for the next data label"""
+        #print(self._order)
         if line.startswith("<"):
             if line.startswith("<Deformed$image"):
                 #stripped = self.deformed_image_case(line)

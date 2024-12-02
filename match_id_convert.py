@@ -39,6 +39,7 @@ class MetadataConverter:
                         order = self.check_for_order(ln)
                         if order != None:
                             self._order = order
+                            #print(self._order)
                             self._order = re.sub("[" + "% Order: " + "]", "", ln)
                             self._order = self._order.split(",")
 
@@ -141,6 +142,7 @@ class MetadataConverter:
     def key_val_pair_search(self, line, d_type):
         """search for metadata values when search_type is set to key_vals,
         swtich search type to data_type to look for the next data label"""
+        #print(self._order)
         if line.startswith("<"):
             if line.startswith("<Deformed$image"):
                 #stripped = self.deformed_image_case(line)
@@ -158,9 +160,14 @@ class MetadataConverter:
 
     def write_to_dict(self, stripped, d_type):
         pair = stripped.split("=")
-        value = self.assign_dtype(pair[1], d_type, pair[0])
-        self._mydict[pair[0]] = value
-        self._search_type = "data_type"
+        if self._order != None:
+            for i in range(len(self._order)):
+                vals = self.make_list(pair[1])
+                self._mydict[self._order[i]] = vals[i]
+        else:
+            value = self.assign_dtype(pair[1], d_type, pair[0])
+            self._mydict[pair[0]] = value
+            self._search_type = "data_type"
 
 
 

@@ -37,6 +37,8 @@ class MetadataConverter:
                         self._order = None
                     elif self._search_type == "check_order":
                         order = self.check_for_order(ln)
+                        #print(order)
+                        #print(self._order)
                         if order != None:
                             self._order = order
                             self._order = re.sub("[" + "% Order: " + "]", "", ln)
@@ -130,7 +132,7 @@ class MetadataConverter:
         """check for order param names"""
         has_order = "Order: " in line
         if has_order == True:
-            print(line)
+            #print(line)
             return line
         self._search_type = "key_vals"
 
@@ -173,8 +175,11 @@ class MetadataConverter:
             self._search_type = "data_type"
         self._order = None
     """
-    
+
     def write_to_dict(self, stripped, d_type):
+        if self._order != None:
+            print(stripped)
+            print(self._order)
         pair = stripped.split("=")
         value = self.assign_dtype(pair[1], d_type, pair[0])
         self._mydict[pair[0]] = value

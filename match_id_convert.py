@@ -140,6 +140,7 @@ class MetadataConverter:
     def deformed_image_case(self, line):
         deformed_imgs = line.split()
         part = deformed_imgs[0].replace('<Deformed$image>=','DeformedImage=')
+        return part
 
 
     def key_val_pair_search(self, line, d_type):
@@ -147,8 +148,11 @@ class MetadataConverter:
         swtich search type to data_type to look for the next data label"""
         if line.startswith("<"):
             if line.startswith("<Deformed$image"):
-                #stripped = self.deformed_image_case(line)
-                pass
+                stripped = self.deformed_image_case(line)
+                #print(stripped) stops after the first image...
+                #print("hello")
+                d_type = "dimage_"
+                self.write_to_dict(stripped, d_type)
             elif line.startswith("<Shape>"):
                 stripped = self.shape_case(line)
                 d_type = "shape_"

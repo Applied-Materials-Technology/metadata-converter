@@ -32,13 +32,12 @@ class MetadataConverter:
                 else:
                     if self._search_type == "data_type":
                         dat_type = self.data_type_mark_search(ln)
+                        self._order = None
                     elif self._search_type == "key_vals":
                         results = self.key_val_pair_search(ln, dat_type)
-                        self._order = None
                     elif self._search_type == "check_order":
                         order = self.check_for_order(ln)
-                        #print(order)
-                        #print(self._order)
+            
                         if order != None:
                             self._order = order
                             self._order = re.sub("[" + "% Order: " + "]", "", ln)
@@ -93,6 +92,7 @@ class MetadataConverter:
         """adds specific marker for non standard form parameter extensometer"""
         stripped = re.sub("[" + self._params.bad_chars + "]", "", line)
         return stripped
+    
 
     def shape_list(self, shape_id, data):
         data = data.split(";")
@@ -117,8 +117,6 @@ class MetadataConverter:
         return list_vals
 
 
-
-
     def data_type_mark_search(self, line):
         """search for data type labels when search_type is set to key_vals,
         switch search type to key_vals once label has been found to find paired metadata values"""
@@ -128,23 +126,25 @@ class MetadataConverter:
                 self._search_type = "check_order"
                 return str(i)
 
+
     def check_for_order(self,line):
         """check for order param names"""
         has_order = "Order: " in line
-        if has_order == True:
-            #print(line)
-            return line
         self._search_type = "key_vals"
+
+        if has_order == True:
+            return line
+        
 
     #FIX ISSUE WITH ADDING
     def deformed_image_case(self, line):
         deformed_imgs = line.split()
         part = deformed_imgs[0].replace('<Deformed$image>=','DeformedImage=')
-            
+
+
     def key_val_pair_search(self, line, d_type):
         """search for metadata values when search_type is set to key_vals,
         swtich search type to data_type to look for the next data label"""
-        #print(self._order)
         if line.startswith("<"):
             if line.startswith("<Deformed$image"):
                 #stripped = self.deformed_image_case(line)
@@ -159,32 +159,22 @@ class MetadataConverter:
             else:
                 stripped = re.sub("[" + self._params.bad_chars + "]", "", line)
                 self.write_to_dict(stripped, d_type)
-    """
+
+
     def write_to_dict(self, stripped, d_type):
         pair = stripped.split("=")
-        #print(self._order)
         if self._order != None:
+            dictionary1 = {}
+            value = self.make_double(pair[1])
             for i in range(len(self._order)):
-                #vals = self.make_list(pair[1])
-                #self._mydict[self._order[i]] = vals[i]
-                #self._mydict.update({self._order[i]:vals[i]})
-                pass
+                key = self.make_str(self._order[i])
+                dictionary1[key] = value[i]
+            self._mydict[pair[0]] = dictionary1
         else:
             value = self.assign_dtype(pair[1], d_type, pair[0])
             self._mydict[pair[0]] = value
-            self._search_type = "data_type"
-        self._order = None
-    """
-
-    def write_to_dict(self, stripped, d_type):
-        if self._order != None:
-            print(stripped)
-            print(self._order)
-        pair = stripped.split("=")
-        value = self.assign_dtype(pair[1], d_type, pair[0])
-        self._mydict[pair[0]] = value
+        
         self._search_type = "data_type"
-
 
 
     """assign the right data type to each metadata value"""

@@ -136,7 +136,6 @@ class MetadataConverter:
             return line
         
 
-    #FIX ISSUE WITH ADDING
     def deformed_image_case(self, line):
         deformed_imgs = line.split()
         part = deformed_imgs[0].replace('<Deformed$image>=','DeformedImage=')
@@ -149,8 +148,6 @@ class MetadataConverter:
         if line.startswith("<"):
             if line.startswith("<Deformed$image"):
                 stripped = self.deformed_image_case(line)
-                #print(stripped) stops after the first image...
-                #print("hello")
                 d_type = "dimage_"
                 self.write_to_dict(stripped, d_type)
             elif line.startswith("<Shape>"):
@@ -214,7 +211,7 @@ class MetadataConverter:
 
 
     def save_data(self):
-        with open(Path("dict_save2.json"), 'w',encoding="utf-8") as file:
+        with open(Path("dict_save.json"), 'w',encoding="utf-8") as file:
             json.dump(self._mydict,file,indent=4)
 
 

@@ -9,6 +9,7 @@ class MatchIDFormat:
     data_types: tuple[str,str,str,str] = ("i_", "b_", "d_", "s_")
     bad_chars: str = "$<>"
     bad_chars2: str = "_.;"
+    unit_file: Path = "example_metadata/units.json"
 
 class MetadataConverter:
     def __init__(self, meta_convert_params: MatchIDFormat) -> None:
@@ -17,6 +18,12 @@ class MetadataConverter:
         self._images: list = []
         self._search_type: str = "data_type"
         self._order = None
+        self._units = None
+
+    def open_units(self):
+        with open (self._params.unit_file, "r") as fi:
+            my_units = json.load(fi)
+            self._units = my_units
 
     """open the metadata file and search through depending on the value of search_type"""
     def extract_metadata(self, metadata: Path):
@@ -170,10 +177,12 @@ class MetadataConverter:
             for i in range(len(self._order)):
                 key = self.make_str(self._order[i])
                 dictionary1[key] = value[i]
+                #dictionary1[key+"hello"] = "HELLO"
             self._mydict[pair[0]] = dictionary1
         else:
             value = self.assign_dtype(pair[1], d_type, pair[0])
             self._mydict[pair[0]] = value
+            #self._mydict[pair[0]+"hello"] = value
         
         self._search_type = "data_type"
 
@@ -211,7 +220,7 @@ class MetadataConverter:
 
 
     def save_data(self):
-        with open(Path("dict_save.json"), 'w',encoding="utf-8") as file:
+        with open(Path("dict_save_units.json"), 'w',encoding="utf-8") as file:
             json.dump(self._mydict,file,indent=4)
 
 
@@ -225,6 +234,7 @@ def main() -> None:
 
     metadata_object.extract_metadata(Path(args.metadatafile))
     metadata_object.save_data()
+    metadata_object.open_units()
 
 
 if __name__ == "__main__":

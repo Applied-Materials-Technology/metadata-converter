@@ -1,98 +1,322 @@
 {
     "InputType": "Stereo",
     "Version": "2024.1.0",
-    "Camera0index": "_0.",
-    "Camera1index": "_1.",
+    "Camera0index": {
+        "value": "_0.",
+        "unit": ""
+    },
+    "Camera1index": {
+        "value": "_1.",
+        "unit": ""
+    },
     "Camera0intrinsic": {
-        "Fx": 19446.9967841915,
-        "Fy": 19449.2302572515,
-        "Fs": 3.98670873300306,
-        "K1": -0.198314453249161,
-        "K2": -1.17758838620526,
-        "K3": 25.0116707082892,
-        "P1": 0.000657138937677177,
-        "P2": -0.00126992881650487,
-        "Cx": 2621.71037951333,
-        "Cy": 2292.06264680094,
-        "Xoffst": 0.0,
-        "Yoffst": 0.0
+        "Fx": {
+            "value": 19446.9967841915,
+            "unit": "px"
+        },
+        "Fy": {
+            "value": 19449.2302572515,
+            "unit": "px"
+        },
+        "Fs": {
+            "value": 3.98670873300306,
+            "unit": "px"
+        },
+        "K1": {
+            "value": -0.198314453249161,
+            "unit": "px"
+        },
+        "K2": {
+            "value": -1.17758838620526,
+            "unit": "px"
+        },
+        "K3": {
+            "value": 25.0116707082892,
+            "unit": "px"
+        },
+        "P1": {
+            "value": 0.000657138937677177,
+            "unit": "px"
+        },
+        "P2": {
+            "value": -0.00126992881650487,
+            "unit": "px"
+        },
+        "Cx": {
+            "value": 2621.71037951333,
+            "unit": "px"
+        },
+        "Cy": {
+            "value": 2292.06264680094,
+            "unit": "px"
+        },
+        "Xoffst": {
+            "value": 0.0,
+            "unit": "px"
+        },
+        "Yoffst": {
+            "value": 0.0,
+            "unit": "px"
+        }
     },
     "Camera1intrinsic": {
-        "Fx": 19488.1391697726,
-        "Fy": 19487.4557729832,
-        "Fs": -3.44692648059168,
-        "K1": -0.186849988637355,
-        "K2": -1.16571544515433,
-        "K3": 25.7568337708707,
-        "P1": -0.000259094266932671,
-        "P2": -0.000805856843096683,
-        "Cx": 2656.1688811299,
-        "Cy": 2254.54727562117,
-        "Xoffst": 0.0,
-        "Yoffst": 0.0
+        "Fx": {
+            "value": 19488.1391697726,
+            "unit": "px"
+        },
+        "Fy": {
+            "value": 19487.4557729832,
+            "unit": "px"
+        },
+        "Fs": {
+            "value": -3.44692648059168,
+            "unit": "px"
+        },
+        "K1": {
+            "value": -0.186849988637355,
+            "unit": "px"
+        },
+        "K2": {
+            "value": -1.16571544515433,
+            "unit": "px"
+        },
+        "K3": {
+            "value": 25.7568337708707,
+            "unit": "px"
+        },
+        "P1": {
+            "value": -0.000259094266932671,
+            "unit": "px"
+        },
+        "P2": {
+            "value": -0.000805856843096683,
+            "unit": "px"
+        },
+        "Cx": {
+            "value": 2656.1688811299,
+            "unit": "px"
+        },
+        "Cy": {
+            "value": 2254.54727562117,
+            "unit": "px"
+        },
+        "Xoffst": {
+            "value": 0.0,
+            "unit": "px"
+        },
+        "Yoffst": {
+            "value": 0.0,
+            "unit": "px"
+        }
     },
-    "Distortions": 5,
+    "Distortions": {
+        "value": 5,
+        "unit": ""
+    },
     "Extrinsicparameters": {
-        "Tx": -76.1592000058748,
-        "Ty": 0.369895217396606,
-        "Tz": 6.68573747859262,
-        "Thta": -0.179308269821643,
-        "Phi": 11.2283226357855,
-        "Psi": -0.273496208384499
+        "Tx": {
+            "value": -76.1592000058748,
+            "unit": "mm"
+        },
+        "Ty": {
+            "value": 0.369895217396606,
+            "unit": "mm"
+        },
+        "Tz": {
+            "value": 6.68573747859262,
+            "unit": "mm"
+        },
+        "Thta": {
+            "value": -0.179308269821643,
+            "unit": "deg"
+        },
+        "Phi": {
+            "value": 11.2283226357855,
+            "unit": "deg"
+        },
+        "Psi": {
+            "value": -0.273496208384499,
+            "unit": "deg"
+        }
     },
-    "DeformedImage": "<C:\\TempWorkingDirectory\\AdelTayeb\\HIVE\\HIVE_Data_04_07_2023\\04_07\\Pulse_19KW\\Image_0000_0.tiff;True;1;0;0;SAME_None;CROSS_None>",
-    "Subsetsize": 39,
-    "Stepsize": 15,
-    "Correlation": 5,
-    "SubsetWeight": 0,
-    "Interpolation": 6,
-    "Transformation": 3,
-    "StereoTransformation": 1,
-    "Precision": [
-        0.001
-    ],
-    "Iterations": 20,
-    "Correlationtreshold": [
-        0.9
-    ],
-    "Missingdata": false,
-    "Maximalrigid": 100,
-    "Estimatedstrain": "small",
-    "Largeangles": false,
-    "History": 1,
-    "Noise": 2,
-    "Kernelsize": 5,
-    "Epipolartolerance": [
-        5.0
-    ],
-    "Epipolarerror": 10,
-    "Triangulationoptimization": false,
-    "Processors": 32,
-    "Coordinatetransformation": 1,
-    "Rescaled": true,
-    "Automaticstrain": false,
-    "Strainwindow": 5,
-    "Pointtolerance": 0,
-    "Strainconvention": 1,
-    "Straininterpolation": 0,
-    "Automaticexport": false,
-    "Exportformat": 0,
-    "Outputpath": "C:\\TempWorkingDirectory\\AdelTayeb\\HIVE\\HIVE_Data_04_07_2023\\04_07\\Pulse_19KW",
-    "DataStorage": 1,
-    "Delimiter": ",",
-    "Shape": [
-        0,
-        false,
-        4,
-        1992,
-        1970,
-        2539,
-        1970,
-        2539,
-        3322,
-        1992,
-        3322,
-        2266,
-        2653
-    ]
+    "DeformedImage": {
+        "value": "<C:\\TempWorkingDirectory\\AdelTayeb\\HIVE\\HIVE_Data_04_07_2023\\04_07\\Pulse_19KW\\Image_0000_0.tiff;True;1;0;0;SAME_None;CROSS_None>",
+        "unit": ""
+    },
+    "Subsetsize": {
+        "value": 39,
+        "unit": "px"
+    },
+    "Stepsize": {
+        "value": 15,
+        "unit": "px"
+    },
+    "Correlation": {
+        "value": 5,
+        "unit": ""
+    },
+    "SubsetWeight": {
+        "value": 0,
+        "unit": ""
+    },
+    "Interpolation": {
+        "value": 6,
+        "unit": ""
+    },
+    "Transformation": {
+        "value": 3,
+        "unit": ""
+    },
+    "StereoTransformation": {
+        "value": 1,
+        "unit": ""
+    },
+    "Precision": {
+        "value": [
+            0.001
+        ],
+        "unit": [
+            ""
+        ]
+    },
+    "Iterations": {
+        "value": 20,
+        "unit": ""
+    },
+    "Correlationtreshold": {
+        "value": [
+            0.9
+        ],
+        "unit": [
+            ""
+        ]
+    },
+    "Missingdata": {
+        "value": false,
+        "unit": ""
+    },
+    "Maximalrigid": {
+        "value": 100,
+        "unit": "px"
+    },
+    "Estimatedstrain": {
+        "value": "small",
+        "unit": ""
+    },
+    "Largeangles": {
+        "value": false,
+        "unit": ""
+    },
+    "History": {
+        "value": 1,
+        "unit": ""
+    },
+    "Noise": {
+        "value": 2,
+        "unit": ""
+    },
+    "Kernelsize": {
+        "value": 5,
+        "unit": ""
+    },
+    "Epipolartolerance": {
+        "value": [
+            5.0
+        ],
+        "unit": [
+            "px"
+        ]
+    },
+    "Epipolarerror": {
+        "value": 10,
+        "unit": ""
+    },
+    "Triangulationoptimization": {
+        "value": false,
+        "unit": ""
+    },
+    "Processors": {
+        "value": 32,
+        "unit": ""
+    },
+    "Coordinatetransformation": {
+        "value": 1,
+        "unit": ""
+    },
+    "Rescaled": {
+        "value": true,
+        "unit": ""
+    },
+    "Automaticstrain": {
+        "value": false,
+        "unit": ""
+    },
+    "Strainwindow": {
+        "value": 5,
+        "unit": ""
+    },
+    "Pointtolerance": {
+        "value": 0,
+        "unit": "%"
+    },
+    "Strainconvention": {
+        "value": 1,
+        "unit": ""
+    },
+    "Straininterpolation": {
+        "value": 0,
+        "unit": ""
+    },
+    "Automaticexport": {
+        "value": false,
+        "unit": ""
+    },
+    "Exportformat": {
+        "value": 0,
+        "unit": ""
+    },
+    "Outputpath": {
+        "value": "C:\\TempWorkingDirectory\\AdelTayeb\\HIVE\\HIVE_Data_04_07_2023\\04_07\\Pulse_19KW",
+        "unit": ""
+    },
+    "DataStorage": {
+        "value": 1,
+        "unit": ""
+    },
+    "Delimiter": {
+        "value": ",",
+        "unit": ""
+    },
+    "Shape": {
+        "value": [
+            0,
+            false,
+            4,
+            1992,
+            1970,
+            2539,
+            1970,
+            2539,
+            3322,
+            1992,
+            3322,
+            2266,
+            2653
+        ],
+        "unit": [
+            "",
+            "",
+            "",
+            "px",
+            "px",
+            "px",
+            "px",
+            "px",
+            "px",
+            "px",
+            "px",
+            "px",
+            "px"
+        ]
+    }
 }

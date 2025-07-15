@@ -168,21 +168,32 @@ class MetadataConverter:
                 stripped = re.sub("[" + self._params.bad_chars + "]", "", line)
                 self.write_to_dict(stripped, d_type)
 
+    def get_unit(self, value):
+        unit = self._units[value]
+        return unit
+    
+    def get_unit_with_order(self, value, order):
+        print(self._units[order][value.replace('\n','')])
+        unit = self._units[order][value.replace('\n','')]
+        return unit
 
     def write_to_dict(self, stripped, d_type):
         pair = stripped.split("=")
         if self._order != None:
             dictionary1 = {}
             value = self.make_double(pair[1])
+            #print(pair[0])
             for i in range(len(self._order)):
                 key = self.make_str(self._order[i])
-                dictionary1[key] = value[i]
-                #dictionary1[key+"hello"] = "HELLO"
+                #print(self._order[i])
+                pair[0] = pair[0].replace('\n','')
+                my_unit = self.get_unit_with_order(value = self._order[i], order = pair[0].replace('\n',''))
+                dictionary1[key]={"value":value[i],"unit":my_unit}
             self._mydict[pair[0]] = dictionary1
         else:
             value = self.assign_dtype(pair[1], d_type, pair[0])
-            self._mydict[pair[0]] = value
-            #self._mydict[pair[0]+"hello"] = value
+            my_unit = self.get_unit(pair[0])
+            self._mydict[pair[0]]={"value":value,"unit":my_unit}
         
         self._search_type = "data_type"
 
@@ -231,6 +242,8 @@ def main() -> None:
 
     meta_convert_params = MatchIDFormat()
     metadata_object = MetadataConverter(meta_convert_params)
+
+    metadata_object.open_units()
 
     metadata_object.extract_metadata(Path(args.metadatafile))
     metadata_object.save_data()

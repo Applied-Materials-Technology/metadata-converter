@@ -51,19 +51,19 @@ class MetadataConverter:
                             self._order = self._order.split(",")
 
 
-    def make_int(self, val):
+    def make_int(self, val: str) -> int:
         """makes metadata value integer when specified"""
         stripped_val = re.sub("[" + self._params.bad_chars2 + "]", "", val)
         val2 = int(stripped_val)
         return val2
 
-    def make_str(self, val):
+    def make_str(self, val: str) -> str:
         """makes metadata value string when specified"""
         stripped_val = re.sub("[" + "\n" + "]", "", val)
         val = str(stripped_val)
         return val
 
-    def make_bool(self, val):
+    def make_bool(self, val: str) -> bool:
         """makes metadata value boolean when specified"""
         stripped_val = re.sub("[" + "\n" + "]", "", val)
         if stripped_val == "True":
@@ -72,7 +72,7 @@ class MetadataConverter:
             boolval = False
         return boolval
 
-    def make_double(self, val):
+    def make_double(self, val: str) -> float:
         """splits metadata value into list of individual values when specified"""
         val = val.split(";")
         stripped_val = re.sub("[" + "\n" + "]", "", val[-1])
@@ -81,7 +81,7 @@ class MetadataConverter:
             val[i] = float(val[i])
         return val
     
-    def make_list(self, val):
+    def make_list(self, val: str) -> list:
         val = val.split(";")
         stripped_val = re.sub("[" + "\n" + "]", "", val[-1])
         val[-1] = stripped_val
@@ -89,19 +89,19 @@ class MetadataConverter:
             val[i] = (val[i])
         return val
 
-    def shape_case(self, line):
+    def shape_case(self, line: str) -> str:
         """adds specific marker for non standard form parameter shape"""
         stripped = re.sub("[" + self._params.bad_chars + "]", "", line)
         return stripped
 
 
-    def extensometer_case(self, line):
+    def extensometer_case(self, line: str) -> str:
         """adds specific marker for non standard form parameter extensometer"""
         stripped = re.sub("[" + self._params.bad_chars + "]", "", line)
         return stripped
     
 
-    def shape_list(self, shape_id, data):
+    def shape_list(self, shape_id: int, data: str) -> list:
         data = data.split(";")
         stripped_val = re.sub("[" + "\n" + "]", "", data[-1])
         data[-1] = stripped_val
@@ -124,7 +124,7 @@ class MetadataConverter:
         return list_vals
 
 
-    def data_type_mark_search(self, line):
+    def data_type_mark_search(self, line: str) -> str:
         """search for data type labels when search_type is set to key_vals,
         switch search type to key_vals once label has been found to find paired metadata values"""
         for i in self._params.data_types:
@@ -134,7 +134,7 @@ class MetadataConverter:
                 return str(i)
 
 
-    def check_for_order(self,line):
+    def check_for_order(self, line: str) -> str:
         """check for order param names"""
         has_order = "Order: " in line
         self._search_type = "key_vals"
@@ -143,13 +143,13 @@ class MetadataConverter:
             return line
         
 
-    def deformed_image_case(self, line):
+    def deformed_image_case(self, line: str) -> str:
         deformed_imgs = line.split()
         part = deformed_imgs[0].replace('<Deformed$image>=','DeformedImage=')
         return part
 
 
-    def key_val_pair_search(self, line, d_type):
+    def key_val_pair_search(self, line: str, d_type: str):
         """search for metadata values when search_type is set to key_vals,
         swtich search type to data_type to look for the next data label"""
         if line.startswith("<"):
@@ -168,26 +168,23 @@ class MetadataConverter:
                 stripped = re.sub("[" + self._params.bad_chars + "]", "", line)
                 self.write_to_dict(stripped, d_type)
 
-    def get_unit(self, value):
+    def get_unit(self, value: str) -> str:
         unit = self._units[value]
         return unit
     
-    def get_unit_with_order(self, value, order):
+    def get_unit_with_order(self, value: str, order: str) -> str:
         print(self._units[order][value.replace('\n','')])
         unit = self._units[order][value.replace('\n','')]
         return unit
 
-    def write_to_dict(self, stripped, d_type):
+    def write_to_dict(self, stripped: str, d_type: str):
         pair = stripped.split("=")
         if self._order != None:
             dictionary1 = {}
             value = self.make_double(pair[1])
-            #print(pair[0])
             for i in range(len(self._order)):
                 key = self.make_str(self._order[i])
-                #print(self._order[i])
-                pair[0] = pair[0].replace('\n','')
-                my_unit = self.get_unit_with_order(value = self._order[i], order = pair[0].replace('\n',''))
+                my_unit = self.get_unit_with_order(value = self._order[i], order = pair[0])
                 dictionary1[key]={"value":value[i],"unit":my_unit}
             self._mydict[pair[0]] = dictionary1
         else:
@@ -199,7 +196,7 @@ class MetadataConverter:
 
 
     """assign the right data type to each metadata value"""
-    def assign_dtype(self, data, d_type, name):
+    def assign_dtype(self, data: str, d_type: str, name):
         try:
             if d_type == "i_":
                 val = self.make_int(data)

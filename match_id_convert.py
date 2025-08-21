@@ -244,7 +244,6 @@ def main() -> None:
 
     metadata_object.extract_metadata(Path(args.metadatafile))
     metadata_object.save_data()
-    metadata_object.open_units()
 
 
 if __name__ == "__main__":
